@@ -4,3 +4,5 @@ Auth.elm
 generated-code
 build-artifacts
 *.log
+elm.code-workspace
+.idea
