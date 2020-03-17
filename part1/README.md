@@ -16,6 +16,8 @@ elm init
 elm-live Main.elm --open 
 ```
 
+Refer to documentation for [elm-live](https://www.elm-live.com)
+
 ## References
 
 * [**if-expressions**](http://elm-lang.org/docs/syntax#conditionals)

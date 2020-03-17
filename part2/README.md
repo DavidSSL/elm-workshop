@@ -4,7 +4,7 @@ Part 2
 ## Installation
 
 ```bash
-elm-package install
+elm init
 ```
 
 (Answer `y` when prompted.)
