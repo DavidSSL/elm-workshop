@@ -4,7 +4,7 @@ Part 4
 ## Installation
 
 ```bash
-elm-package install
+elm init
 ```
 
 (Answer `y` when prompted.)
@@ -13,7 +13,7 @@ elm-package install
 ## Building
 
 ```bash
-elm-live Main.elm --open --output=elm.js
+elm-live Main.elm --open 
 ```
 
 ## References

@@ -1,5 +1,7 @@
 module Main exposing (..)
 
+import Browser exposing (sandbox)
+import Debug exposing (toString)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -92,13 +94,14 @@ update msg model =
         { model
             | results = List.filter (\result -> result.id /= msg.data) model.results
         }
+
     else
         model
 
 
 main =
-    Html.beginnerProgram
-        { view = view
+    Browser.sandbox
+        { init = initialModel
+        , view = view
         , update = update
-        , model = initialModel
         }
