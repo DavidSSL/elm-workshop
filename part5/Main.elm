@@ -73,7 +73,7 @@ view model =
 
             -- TODO onInput, set the query in the model
             , onInput SetQuery
-            , value model.query
+            , value (Debug.log "query is" model.query)
             ]
             []
         , button [ class "search-button" ] [ text "Search" ]
