@@ -88,7 +88,7 @@ viewSearchResult result =
             [ text result.name ]
         , button
             -- TODO add an onClick handler that sends a DeleteById msg
-            [ class "hide-result" ]
+            [ class "hide-result", onClick (DeleteById result.id) ]
             [ text "X" ]
         ]
 
@@ -97,7 +97,12 @@ update : Msg -> Model -> Model
 update msg model =
     -- TODO if we get a SetQuery msg, use it to set the model's query field,
     -- and if we get a DeleteById msg, delete the appropriate result
-    model
+    case msg of
+        SetQuery str ->
+            model
+
+        DeleteById id ->
+            { model | results = List.filter (\result -> result.id /= id) model.results }
 
 
 main : Program () Model Msg
