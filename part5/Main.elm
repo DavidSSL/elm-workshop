@@ -72,6 +72,7 @@ view model =
             [ class "search-query"
 
             -- TODO onInput, set the query in the model
+            , onInput SetQuery
             , value model.query
             ]
             []
@@ -99,7 +100,7 @@ update msg model =
     -- and if we get a DeleteById msg, delete the appropriate result
     case msg of
         SetQuery str ->
-            model
+            { model | query = str }
 
         DeleteById id ->
             { model | results = List.filter (\result -> result.id /= id) model.results }
