@@ -1,5 +1,7 @@
 module Main exposing (..)
 
+import Browser exposing (sandbox)
+import Debug exposing (toString)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
@@ -70,7 +72,7 @@ view model =
             [ class "search-query"
 
             -- TODO onInput, set the query in the model
-            , defaultValue model.query
+            , value model.query
             ]
             []
         , button [ class "search-button" ] [ text "Search" ]
@@ -98,10 +100,10 @@ update msg model =
     model
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Html.beginnerProgram
-        { view = view
+    Browser.sandbox
+        { init = initialModel
+        , view = view
         , update = update
-        , model = initialModel
         }

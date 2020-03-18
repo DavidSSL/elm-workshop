@@ -61,7 +61,7 @@ initialModel =
 
 {-| TODO add a type annotation to this function
 -}
-view: Model -> Html Msg
+view : Model -> Html Msg
 view model =
     let
         elmHubHeader =
@@ -78,7 +78,7 @@ view model =
 
 {-| TODO add a type annotation to this function
 -}
-viewSearchResult: SearchResult -> Html Msg
+viewSearchResult : SearchResult -> Html Msg
 viewSearchResult result =
     li []
         [ span [ class "star-count" ] [ text (toString result.stars) ]
@@ -92,7 +92,7 @@ viewSearchResult result =
 
 {-| TODO add a type annotation to this function
 -}
-update: Msg -> Model -> Model
+update : Msg -> Model -> Model
 update msg model =
     if msg.operation == "DELETE_BY_ID" then
         { model
