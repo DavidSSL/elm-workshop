@@ -1,19 +1,23 @@
 module Main exposing (..)
 
+-- import Json.Decode.Pipeline exposing (..)
+
+import Browser exposing (sandbox)
+import Debug exposing (toString)
 import Html exposing (..)
-import Html.Attributes exposing (class, defaultValue, href, property, target)
+import Html.Attributes exposing (class, href, property, target, value)
 import Html.Events exposing (..)
-import Json.Decode exposing (..)
+import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 import SampleResponse
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Html.beginnerProgram
-        { view = view
+    Browser.sandbox
+        { init = initialModel
+        , view = view
         , update = update
-        , model = initialModel
         }
 
 
@@ -25,7 +29,7 @@ searchResultDecoder =
     -- Look in SampleResponse.elm to see the exact JSON we'll be decoding!
     --
     -- TODO replace these calls to `hardcoded` with calls to `required`
-    decode SearchResult
+    Decode.succeed SearchResult
         |> hardcoded 0
         |> hardcoded ""
         |> hardcoded 0
@@ -53,7 +57,7 @@ initialModel =
 
 responseDecoder : Decoder (List SearchResult)
 responseDecoder =
-    decode identity
+    Decode.succeed identity
         |> required "items" (list searchResultDecoder)
 
 
@@ -82,7 +86,7 @@ view model =
             [ h1 [] [ text "ElmHub" ]
             , span [ class "tagline" ] [ text "Like GitHub, but for Elm things." ]
             ]
-        , input [ class "search-query", onInput SetQuery, defaultValue model.query ] []
+        , input [ class "search-query", onInput SetQuery, Html.Attributes.value model.query ] []
         , button [ class "search-button" ] [ text "Search" ]
         , ul [ class "results" ]
             (List.map viewSearchResult model.results)
