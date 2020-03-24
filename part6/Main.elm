@@ -1,7 +1,5 @@
 module Main exposing (..)
 
--- import Json.Decode.Pipeline exposing (..)
-
 import Browser exposing (sandbox)
 import Debug exposing (toString)
 import Html exposing (..)
@@ -30,9 +28,9 @@ searchResultDecoder =
     --
     -- TODO replace these calls to `hardcoded` with calls to `required`
     Decode.succeed SearchResult
-        |> hardcoded 0
-        |> hardcoded ""
-        |> hardcoded 0
+        |> required "id" int
+        |> required "full_name" string
+        |> required "stargazers_count" int
 
 
 type alias Model =

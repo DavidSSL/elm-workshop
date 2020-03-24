@@ -4863,22 +4863,21 @@ var $author$project$Main$SearchResult = F3(
 	function (id, name, stars) {
 		return {id: id, name: name, stars: stars};
 	});
-var $elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $elm$json$Json$Decode$string = _Json_decodeString;
 var $elm$json$Json$Decode$succeed = _Json_succeed;
-var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded = A2($elm$core$Basics$composeR, $elm$json$Json$Decode$succeed, $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom);
-var $author$project$Main$searchResultDecoder = A2(
-	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
-	0,
-	A2(
-		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
-		'',
-		A2(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
-			0,
+var $author$project$Main$searchResultDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'stargazers_count',
+	$elm$json$Json$Decode$int,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'full_name',
+		$elm$json$Json$Decode$string,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'id',
+			$elm$json$Json$Decode$int,
 			$elm$json$Json$Decode$succeed($author$project$Main$SearchResult))));
 var $author$project$Main$responseDecoder = A3(
 	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
@@ -5292,7 +5291,6 @@ var $elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
 		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
 	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
 var $elm$html$Html$Events$targetValue = A2(
 	$elm$json$Json$Decode$at,
 	_List_fromArray(
