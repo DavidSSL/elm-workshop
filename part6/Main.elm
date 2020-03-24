@@ -74,9 +74,12 @@ decodeResults json =
         Ok searchResults ->
             searchResults
 
-        Err _ ->
-            Debug.log "We were unable to decode the JSON "
-                []
+        Err errMsg ->
+            let
+                throwaway =
+                    Debug.log "We were unable to decode the JSON " [ errMsg ]
+            in
+            []
 
 
 view : Model -> Html Msg
