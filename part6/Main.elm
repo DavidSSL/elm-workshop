@@ -71,10 +71,12 @@ decodeResults json =
         --
         -- HINT: decodeString returns a Result which is one of the following:
         --
-        -- Ok (List SearchResult)
-        -- Err String
-        _ ->
-            []
+        Ok searchResults ->
+            searchResults
+
+        Err _ ->
+            Debug.log "We were unable to decode the JSON "
+                []
 
 
 view : Model -> Html Msg
