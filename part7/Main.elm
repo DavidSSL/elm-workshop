@@ -1,22 +1,35 @@
 module Main exposing (..)
 
 import Auth
+import Browser
+import Debug exposing (toString)
 import Html exposing (..)
-import Html.Attributes exposing (class, defaultValue, href, property, target)
+import Html.Attributes exposing (class, href, property, target, value)
 import Html.Events exposing (..)
 import Http
-import Json.Decode exposing (Decoder)
+import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Html.program
-        { view = view
+    Browser.element
+        { init = \_ -> ( initialModel, searchFeed initialModel.query )
+        , view = view
         , update = update
-        , init = ( initialModel, searchFeed initialModel.query )
         , subscriptions = \_ -> Sub.none
         }
+
+
+
+{-
+   Html.program
+       { view = view
+       , update = update
+       , init = ( initialModel, searchFeed initialModel.query )
+       , subscriptions = \_ -> Sub.none
+       }
+-}
 
 
 searchFeed : String -> Cmd Msg
@@ -42,15 +55,15 @@ searchFeed query =
 
 responseDecoder : Decoder (List SearchResult)
 responseDecoder =
-    Json.Decode.at [ "items" ] (Json.Decode.list searchResultDecoder)
+    Decode.at [ "items" ] (Decode.list searchResultDecoder)
 
 
 searchResultDecoder : Decoder SearchResult
 searchResultDecoder =
-    decode SearchResult
-        |> required "id" Json.Decode.int
-        |> required "full_name" Json.Decode.string
-        |> required "stargazers_count" Json.Decode.int
+    Decode.succeed SearchResult
+        |> required "id" Decode.int
+        |> required "full_name" Decode.string
+        |> required "stargazers_count" Decode.int
 
 
 type alias Model =
@@ -82,7 +95,7 @@ view model =
             [ h1 [] [ text "ElmHub" ]
             , span [ class "tagline" ] [ text "Like GitHub, but for Elm things." ]
             ]
-        , input [ class "search-query", onInput SetQuery, defaultValue model.query ] []
+        , input [ class "search-query", onInput SetQuery, Html.Attributes.value model.query ] []
         , button [ class "search-button", onClick Search ] [ text "Search" ]
         , viewErrorMessage model.errorMessage
         , ul [ class "results" ] (List.map viewSearchResult model.results)
