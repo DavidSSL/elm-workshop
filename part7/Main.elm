@@ -43,14 +43,17 @@ searchFeed query =
                 ++ "+language:elm&sort=stars&order=desc"
 
         -- HINT: responseDecoder may be useful here.
-        request =
-            "TODO replace this String with a Request built using http://package.elm-lang.org/packages/elm-lang/http/latest/Http#get"
+        --request =
+        -- "TODO replace this String with a Request built using https://package.elm-lang.org/packages/elm/http/latest/"
     in
     -- TODO replace this Cmd.none with a call to Http.send
     -- http://package.elm-lang.org/packages/elm-lang/http/latest/Http#send
     --
     -- HINT: request and HandleSearchResponse may be useful here.
-    Cmd.none
+    Http.get
+        { url = url
+        , expect = Http.expectJson HandleSearchResponse responseDecoder
+        }
 
 
 responseDecoder : Decoder (List SearchResult)
