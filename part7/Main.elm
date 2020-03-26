@@ -36,24 +36,31 @@ searchFeed : String -> Cmd Msg
 searchFeed query =
     let
         url =
-            "https://api.github.com/search/repositories?access_token="
-                ++ Auth.token
-                ++ "&q="
+            "https://api.github.com/search/repositories?q="
                 ++ query
                 ++ "+language:elm&sort=stars&order=desc"
 
+        authHeader =
+            Http.header "Authorization" ("token " ++ Auth.token)
+
         -- HINT: responseDecoder may be useful here.
-        --request =
+        request =
+            { method = "GET"
+            , headers = [ authHeader ]
+            , url = url
+            , body = Http.emptyBody
+            , expect = Http.expectJson HandleSearchResponse responseDecoder
+            , timeout = Nothing
+            , tracker = Nothing
+            }
+
         -- "TODO replace this String with a Request built using https://package.elm-lang.org/packages/elm/http/latest/"
     in
     -- TODO replace this Cmd.none with a call to Http.send
     -- http://package.elm-lang.org/packages/elm-lang/http/latest/Http#send
     --
     -- HINT: request and HandleSearchResponse may be useful here.
-    Http.get
-        { url = url
-        , expect = Http.expectJson HandleSearchResponse responseDecoder
-        }
+    Http.request request
 
 
 responseDecoder : Decoder (List SearchResult)
