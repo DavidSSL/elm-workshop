@@ -6195,6 +6195,7 @@ var $elm$core$List$filter = F2(
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $elm$core$Debug$toString = _Debug_toString;
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6213,7 +6214,51 @@ var $author$project$Main$update = F2(
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var error = result.a;
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					switch (error.$) {
+						case 'BadUrl':
+							var badUrl = error.a;
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										errorMessage: $elm$core$Maybe$Just('Bad Url' + badUrl)
+									}),
+								$elm$core$Platform$Cmd$none);
+						case 'Timeout':
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										errorMessage: $elm$core$Maybe$Just('Request timed out')
+									}),
+								$elm$core$Platform$Cmd$none);
+						case 'NetworkError':
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										errorMessage: $elm$core$Maybe$Just('Network error')
+									}),
+								$elm$core$Platform$Cmd$none);
+						case 'BadStatus':
+							var _int = error.a;
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										errorMessage: $elm$core$Maybe$Just(
+											'Bad status' + $elm$core$Debug$toString(_int))
+									}),
+								$elm$core$Platform$Cmd$none);
+						default:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										errorMessage: $elm$core$Maybe$Just('An error occurred while querying the GitHub API')
+									}),
+								$elm$core$Platform$Cmd$none);
+					}
 				}
 			case 'SetQuery':
 				var query = msg.a;
@@ -6226,8 +6271,8 @@ var $author$project$Main$update = F2(
 				var idToHide = msg.a;
 				var newResults = A2(
 					$elm$core$List$filter,
-					function (_v2) {
-						var id = _v2.id;
+					function (_v3) {
+						var id = _v3.id;
 						return !_Utils_eq(id, idToHide);
 					},
 					model.results);
@@ -6333,7 +6378,6 @@ var $elm$html$Html$Attributes$href = function (url) {
 };
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
-var $elm$core$Debug$toString = _Debug_toString;
 var $author$project$Main$viewSearchResult = function (result) {
 	return A2(
 		$elm$html$Html$li,

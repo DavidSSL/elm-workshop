@@ -153,7 +153,6 @@ update msg model =
 
                 Err error ->
                     -- TODO if decoding failed, store the message in model.errorMessage
-                    --
                     -- HINT 1: Remember, model.errorMessage is a Maybe String - so it
                     -- can only be set to either Nothing or (Just "some string here")
                     --
@@ -162,7 +161,21 @@ update msg model =
                     --
                     -- Hint 3: to check if this is working, break responseDecoder
                     -- by changing "stargazers_count" to "description"
-                    ( model, Cmd.none )
+                    case error of
+                        Http.BadUrl badUrl ->
+                            ( { model | errorMessage = Just ("Bad Url" ++ badUrl) }, Cmd.none )
+
+                        Http.Timeout ->
+                            ( { model | errorMessage = Just "Request timed out" }, Cmd.none )
+
+                        Http.NetworkError ->
+                            ( { model | errorMessage = Just "Network error" }, Cmd.none )
+
+                        Http.BadStatus int ->
+                            ( { model | errorMessage = Just ("Bad status" ++ toString int) }, Cmd.none )
+
+                        _ ->
+                            ( { model | errorMessage = Just "An error occurred while querying the GitHub API" }, Cmd.none )
 
         SetQuery query ->
             ( { model | query = query }, Cmd.none )
