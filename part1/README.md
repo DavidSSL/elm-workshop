@@ -13,7 +13,7 @@ elm init
 ## Building
 
 ```bash
-elm-live Main.elm --open 
+elm-live Main.elm --open -- --output=elm.js
 ```
 
 Refer to documentation for [elm-live](https://www.elm-live.com)
