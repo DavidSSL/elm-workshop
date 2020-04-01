@@ -1,21 +1,36 @@
 port module Main exposing (..)
 
 import Auth
+import Browser
+import Debug exposing (toString)
 import Html exposing (..)
-import Html.Attributes exposing (class, defaultValue, href, property, target)
+import Html.Attributes exposing (class, href, property, target, value)
 import Html.Events exposing (..)
-import Json.Decode exposing (..)
+import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Html.program
-        { view = view
+    Browser.element
+        { init = \_ -> ( initialModel, githubSearch initialModel.query )
+        , view = view
         , update = update
-        , init = ( initialModel, githubSearch (getQueryString initialModel.query) )
-        , subscriptions = \_ -> githubResponse decodeResponse
+        , subscriptions = \_ -> Sub.none
         }
+
+
+
+{-
+    main : Program Never Model Msg
+   main =
+       Html.program
+           { view = view
+           , update = update
+           , init = ( initialModel, githubSearch (getQueryString initialModel.query) )
+           , subscriptions = \_ -> githubResponse decodeResponse
+           }
+-}
 
 
 getQueryString : String -> String
@@ -30,15 +45,15 @@ getQueryString query =
 
 responseDecoder : Decoder (List SearchResult)
 responseDecoder =
-    Json.Decode.at [ "items" ] (Json.Decode.list searchResultDecoder)
+    Decode.at [ "items" ] (Decode.list searchResultDecoder)
 
 
 searchResultDecoder : Decoder SearchResult
 searchResultDecoder =
-    decode SearchResult
-        |> required "id" Json.Decode.int
-        |> required "full_name" Json.Decode.string
-        |> required "stargazers_count" Json.Decode.int
+    Decode.succeed SearchResult
+        |> required "id" Decode.int
+        |> required "full_name" Decode.string
+        |> required "stargazers_count" Decode.int
 
 
 type alias Model =
@@ -70,7 +85,7 @@ view model =
             [ h1 [] [ text "ElmHub" ]
             , span [ class "tagline" ] [ text "Like GitHub, but for Elm things." ]
             ]
-        , input [ class "search-query", onInput SetQuery, defaultValue model.query ] []
+        , input [ class "search-query", onInput SetQuery, Html.Attributes.value model.query ] []
         , button [ class "search-button", onClick Search ] [ text "Search" ]
         , viewErrorMessage model.errorMessage
         , ul [ class "results" ] (List.map viewSearchResult model.results)
